@@ -1,0 +1,12 @@
+
+
+ruls:
+    atticVent:
+        condition: "$atticVentHasScreens = True"
+
+    roof:
+        condition: "($roofType = 'ClassB' AND $wildFireRisk = 'A') OR ($roofType = 'ClassA')"
+    vegetation:
+        variables:
+            - name: "windowDistanceMultiplier"
+              expression: 

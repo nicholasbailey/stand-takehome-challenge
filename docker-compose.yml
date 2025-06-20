@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mitigation-postgres
+    environment:
+      POSTGRES_DB: mitigation_rules
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  mitigation-rules-engine:
+    build:
+      context: ./packages/mitigation-rules-engine
+      dockerfile: Dockerfile
+    container_name: mitigation-rules-engine
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: mitigation_rules
+      JWT_SECRET: your-jwt-secret-key
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  applied-sciences-ui:
+    build:
+      context: ./packages/applied-sciences-ui
+      dockerfile: Dockerfile
+    container_name: applied-sciences-ui
+    environment:
+      REACT_APP_API_URL: http://localhost:3001
+    ports:
+      - "3002:3000"
+    networks:
+      - app-network
+
+  underwriting-ui:
+    build:
+      context: ./packages/underwriting-ui
+      dockerfile: Dockerfile
+    container_name: underwriting-ui
+    environment:
+      REACT_APP_API_URL: http://localhost:3001
+    ports:
+      - "3003:3000"
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge 

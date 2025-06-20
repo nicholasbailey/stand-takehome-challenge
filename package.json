@@ -1,0 +1,25 @@
+{
+  "name": "mitigation-rules-monorepo",
+  "version": "1.0.0",
+  "description": "Monorepo for mitigation rules engine applications",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspaces",
+    "test": "npm run test --workspaces",
+    "test:watch": "npm run test:watch --workspaces",
+    "test:coverage": "npm run test:coverage --workspaces",
+    "test:backend": "npm run test --workspace=packages/mitigation-rules-engine",
+    "test:shared": "npm run test --workspace=packages/shared",
+    "test:underwriting-ui": "npm run test --workspace=packages/underwriting-ui -- --watchAll=false",
+    "test:applied-sciences-ui": "npm run test --workspace=packages/applied-sciences-ui -- --watchAll=false",
+    "install:all": "npm install",
+    "clean": "npm run clean --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+} 

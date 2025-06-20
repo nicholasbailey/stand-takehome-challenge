@@ -1,0 +1,81 @@
+.resultsContainer {
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+
+.resultsTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHeader {
+  background-color: #f3f4f6;
+}
+
+.tableHeaderCell,
+.tableCell {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tableHeaderCell {
+  font-weight: 600;
+  color: #374151;
+}
+
+.tableRow {
+  transition: all 0.2s ease;
+}
+
+.tableRowPassed {
+  border-left: 4px solid #10b981;
+}
+
+.tableRowFailed {
+  border-left: 4px solid #ef4444;
+}
+
+.ruleNameWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusIcon {
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.statusIconPassed {
+  color: #10b981;
+}
+
+.statusIconFailed {
+  color: #ef4444;
+}
+
+.mitigationList {
+  list-style-type: disc;
+  list-style-position: inside;
+  margin: 0;
+  padding: 0;
+}
+
+.noMitigations {
+  color: #6b7280;
+} 

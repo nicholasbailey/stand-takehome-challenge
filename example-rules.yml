@@ -1,0 +1,51 @@
+rules:
+    atticVent:
+        condition:
+            operator: "EQUALS"
+            values:
+                - "$atticVentHasScreens"
+                - True
+    roof:
+        condition:
+            operator: "OR"
+            values:
+                - operator: "AND"
+                  values:
+                    - operator: "EQUALS"
+                      values:
+                            - "$roofType"
+                            - "ClassB"
+                    - operator: "EQUALS"
+                      values:
+                            - "$wildFireRisk"
+                            - "A"
+                - operator: "EQUALS"
+                  values: 
+                    - "$roofType"
+                    - "ClassA"
+    vegetation:
+        condition:
+            operator: "EACH"
+                value: "$vegetation"
+                variables:
+                    - name: "windowDistanceMultiplier"
+                      operator: "lookup"
+                      key: "$windowType"
+                      values:
+                        - "SinglePane": 3
+                        - "DoublePane": 2
+                        - "TemperedGlass": 1
+                    - name: "vegationTypeDivisor"
+                      operator: "lookup"
+                      key: "$vegetationType"
+                      values:
+                        - "Low": 1
+                        - "Medium": 2
+                        - "High": 3
+                    - name: 
+
+                rule:
+                    operator: "MULTIPLY"
+                    values:
+                        - "$windowDistanceMultiplier"
+                        - 30

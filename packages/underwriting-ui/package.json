@@ -3,20 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mitigation/shared": "*",
     "@types/node": "^16.18.68",
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
+    "axios": "^1.6.2",
+    "milligram": "1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4",
-    "axios": "^1.6.2",
-    "@mitigation/shared": "*"
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@testing-library/react": "^13.4.0",
     "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3"
   },
   "scripts": {
@@ -44,4 +45,4 @@
       "last 1 safari version"
     ]
   }
-} 
+}

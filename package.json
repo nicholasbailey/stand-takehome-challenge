@@ -7,7 +7,11 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build:shared && npm run build:apps",
+    "build:shared": "npm run build --workspace=packages/shared",
+    "build:apps": "npm run build --workspace=packages/underwriting-ui & npm run build --workspace=packages/mitigation-rules-engine & npm run build --workspace=packages/applied-sciences-ui & wait",
+    "rebuild": "npm run clean && npm run build",
+    "watch": "npm run dev --workspace=packages/shared & npm run start --workspace=packages/underwriting-ui & npm run dev --workspace=packages/mitigation-rules-engine & wait",
     "dev": "npm run dev --workspaces",
     "test": "npm run test --workspaces",
     "test:watch": "npm run test:watch --workspaces",
@@ -17,7 +21,7 @@
     "test:underwriting-ui": "npm run test --workspace=packages/underwriting-ui -- --watchAll=false",
     "test:applied-sciences-ui": "npm run test --workspace=packages/applied-sciences-ui -- --watchAll=false",
     "install:all": "npm install",
-    "clean": "npm run clean --workspaces"
+    "clean": "npm run clean --workspaces --if-present"
   },
   "devDependencies": {
     "typescript": "^5.3.3"

@@ -5,14 +5,15 @@ export enum MitigationType {
 }
 
 
-export interface MitigationModel {
+export interface Mitigation {
     type: MitigationType;
     description: string
 }
 
-export class MitigationRuleModel {
+export interface MitigationRuleModel {
+    id?: string | undefined;
     name: string;
-    plainTextDescription: string;
-    rule: any
-    mitigations: MitigationModel[]
+    description: string;
+    check: any
+    mitigations: Mitigation[]
 }

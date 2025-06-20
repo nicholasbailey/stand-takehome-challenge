@@ -1,7 +1,3 @@
-
-
-
-
 export interface ASTNode<T> {
     evaluate(context: Record<string, any>): T
     toPlainObject(): Record<string, any>
@@ -50,8 +46,14 @@ export class VariableASTNode implements ASTNode<any> {
 export class AndASTNode implements ASTNode<boolean> {
     constructor(public operands: ASTNode<boolean>[]) {}
 
-    evaluate(context: Record<string, any>): any {
-        return this.operands.every(o => o.evaluate(context))
+    evaluate(context: Record<string, any>): boolean {
+        for (const operand of this.operands) {
+            const result = operand.evaluate(context);
+            if (!result) {
+                return false;
+            }
+        }
+        return true;
     }
 
     toPlainObject(): any {
@@ -68,8 +70,14 @@ export class AndASTNode implements ASTNode<boolean> {
 
 export class OrASTNode implements ASTNode<boolean> {
     constructor(public operands: ASTNode<boolean>[]) {}
-    evaluate(context: Record<string, any>): any {
-        return this.operands.some(o => o.evaluate(context))
+    evaluate(context: Record<string, any>): boolean {
+        for (const operand of this.operands) {
+            const result = operand.evaluate(context);
+            if (result) {
+                return true;
+            }
+        }
+        return false;
     }
 
     toPlainObject(): any {
@@ -86,7 +94,7 @@ export class OrASTNode implements ASTNode<boolean> {
 
 export class EqualsASTNode implements ASTNode<boolean> {
     constructor(public operands: ASTNode<any>[]) {}
-    evaluate(context: Record<string, any>): any {
+    evaluate(context: Record<string, any>): boolean {
         if (this.operands.length < 2) {
             throw new Error("You can't have equality with less than two things")
         }

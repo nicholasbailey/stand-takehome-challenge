@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { RuleSetEntity } from './entities/rule-set';
+import { RuleSetVersionEntity } from './entities/rule-set-version';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'mitigation_rules',
   synchronize: process.env.NODE_ENV === 'development',
   logging: false,
-  entities: [RuleSetEntity],
+  entities: [RuleSetEntity, RuleSetVersionEntity],
   migrations: ['src/migrations/*.ts'],
   migrationsTableName: 'migrations',
   subscribers: [],

@@ -1,29 +1,29 @@
 import { DecisionRule } from "./decision-rule";
-import { MitigationModel, MitigationRuleModel } from "@mitigation/shared/models/mitigation-rule";
+import { Mitigation, MitigationRuleModel } from "@mitigation/shared/models/mitigation-rule";
 import { RuleExecutionResult } from "@mitigation/shared/models/execution-result";
 
 export class MitigationRule {
     constructor(
         public name: string,
         public plainTextDescription: string,
-        public rule: DecisionRule,
-        public mitigations: MitigationModel[]
+        public check: DecisionRule,
+        public mitigations: Mitigation[]
     ) {}
 
     evaluate(context: Record<string, any>): RuleExecutionResult {
-        const result = this.rule.evaluate(context)
+        const result = this.check.evaluate(context)
         return {
             rule: this.toPlainObject(),
             passed: result,
-            mitigations: result ? this.mitigations : []
+            mitigations: !result ? this.mitigations : []
         }
     }
 
     toPlainObject(): MitigationRuleModel {
         return {
             name: this.name,
-            plainTextDescription: this.plainTextDescription,
-            rule: this.rule.toPlainObject(),
+            description: this.plainTextDescription,
+            check: this.check.toPlainObject(),
             mitigations: this.mitigations
         }
     }
@@ -31,9 +31,9 @@ export class MitigationRule {
     static fromPlainObject(obj: MitigationRuleModel): MitigationRule {
         return new MitigationRule(
             obj.name,
-            obj.plainTextDescription,
-            DecisionRule.fromPlainObject(obj.rule),
-            obj.mitigations.map((m: any) => m.toPlainObject())
+            obj.description,
+            DecisionRule.fromPlainObject(obj.check),
+            obj.mitigations,
         )
     }
 }

@@ -2,42 +2,26 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddInitialRuleset1704000000000 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
-            INSERT INTO rule_sets 
-                (name, status, rule_data, created_at, updated_at, effective_date)
-            VALUES ('V1', 'published', $$
-            {
-                "rules": [
-                    {
-                        "name": "Attic Vent",
-                        "description": " Ensure all vents, chimneys, and screens can withstand embers (i.e., should be ember-rated)",
-                        "rule": {
-                            "operation": "EQUALS",
-                            "operands": [
-                                {
-                                    "operation": "VARIABLE",
-                                    "name": "atticVentHasScreens"
-                                },
-                                {
-                                    "operation": "VALUE",
-                                    "value": true
-                                }
-                            ]
-                        },
-                        "mitigations": [
-                            {
-                                "type": "Full",
-                                "description": "Add Vents"
-                            }
-                        ]
-                    }
-                ]
-            }$$::jsonb, NOW(), NOW(), '2025-01-01')
+        const result = await queryRunner.query(`
+            INSERT INTO rule_sets (name, is_main)
+            VALUES ('Main', true)
+            RETURNING id
         `);
+        const ruleSetId = result[0].id;
+        
+        await queryRunner.query(`
+            INSERT INTO rule_set_versions 
+                (rule_set_id, rule_data, effective_date)
+            VALUES ($1, $$
+            {
+                "rules": []
+            }$$::jsonb, Now()
+            )
+        `, [ruleSetId]);
 
 
         // TODO: Insert initial ruleset data here
-        // Structure should match your RuleSetEntity:
+        // Structure should match your RuleSetVersion:
         // - name: string
         // - status: 'draft' | 'published' 
         // - rule_data: jsonb (array of your rule objects)
@@ -46,8 +30,8 @@ export class AddInitialRuleset1704000000000 implements MigrationInterface {
         
         // Example:
         // await queryRunner.query(`
-        //     INSERT INTO rule_sets (name, status, rule_data, created_at, updated_at)
-        //     VALUES ('Your Initial Ruleset Name', 'published', '[]'::jsonb, NOW(), NOW())
+        //     INSERT INTO rule_set_versions (version, status, rule_data, created_at, updated_at)
+        //     VALUES (1, 'published', '[]'::jsonb, NOW(), NOW())
         // `);
     }
 
@@ -57,7 +41,7 @@ export class AddInitialRuleset1704000000000 implements MigrationInterface {
         
         // Example:
         // await queryRunner.query(`
-        //     DELETE FROM rule_sets WHERE name = 'Your Initial Ruleset Name'
+        //     DELETE FROM rule_set_versions WHERE version = 1
         // `);
     }
 } 

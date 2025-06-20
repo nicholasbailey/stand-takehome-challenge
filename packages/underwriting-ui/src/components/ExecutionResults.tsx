@@ -37,7 +37,7 @@ const ExecutionResults: React.FC<ExecutionResultsProps> = ({ results }) => {
                       <span>{execution.rule.name}</span>
                     </div>
                   </td>
-                  <td className={styles.tableCell}>{execution.rule.plainTextDescription}</td>
+                  <td className={styles.tableCell}>{execution.rule.description}</td>
                   <td className={styles.tableCell}>
                     {execution.mitigations.length > 0 ? (
                       <ul className={styles.mitigationList}>

@@ -3,6 +3,29 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   padding: 2rem;
+  max-width: 100%;
+  margin-top: 2rem;
+}
+
+/* Responsive design for results - allow wider display */
+@media (min-width: 768px) {
+  .resultsContainer {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .resultsContainer {
+    max-width: 900px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .resultsContainer {
+    max-width: 1000px;
+  }
 }
 
 .resultsTitle {

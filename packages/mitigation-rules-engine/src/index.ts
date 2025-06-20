@@ -29,11 +29,10 @@ app.get('/api/health', (req, res) => {
 // Initialize database and start server
 AppDataSource.initialize()
   .then(() => {
-    console.log('Database connected successfully');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
-    console.error('Database connection failed:', error);
+    console.error('Error during Data Source initialization', error);
   }); 

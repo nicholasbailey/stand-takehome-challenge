@@ -17,8 +17,8 @@ services:
 
   mitigation-rules-engine:
     build:
-      context: ./packages/mitigation-rules-engine
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: packages/mitigation-rules-engine/Dockerfile
     container_name: mitigation-rules-engine
     environment:
       NODE_ENV: development
@@ -35,30 +35,78 @@ services:
       - postgres
     networks:
       - app-network
+    develop:
+      watch:
+        - action: sync
+          path: ./packages/mitigation-rules-engine/src
+          target: /app/packages/mitigation-rules-engine/src
+        - action: sync
+          path: ./packages/shared/src
+          target: /app/packages/shared/src
+        - action: rebuild
+          path: ./packages/mitigation-rules-engine/package.json
+        - action: rebuild
+          path: ./package.json
 
   applied-sciences-ui:
     build:
-      context: ./packages/applied-sciences-ui
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: packages/applied-sciences-ui/Dockerfile
     container_name: applied-sciences-ui
     environment:
+      NODE_ENV: development
       REACT_APP_API_URL: http://localhost:3001
     ports:
       - "3002:3000"
+    depends_on:
+      - postgres
     networks:
       - app-network
+    develop:
+      watch:
+        # Sync source code for hot reload
+        - action: sync
+          path: ./packages/applied-sciences-ui/src
+          target: /app/packages/applied-sciences-ui/src
+        # Sync shared package source
+        - action: sync
+          path: ./packages/shared/src
+          target: /app/packages/shared/src
+        # Rebuild when package.json changes
+        - action: rebuild
+          path: ./packages/applied-sciences-ui/package.json
+        - action: rebuild
+          path: ./package.json
 
   underwriting-ui:
     build:
-      context: ./packages/underwriting-ui
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: packages/underwriting-ui/Dockerfile
     container_name: underwriting-ui
     environment:
+      NODE_ENV: development
       REACT_APP_API_URL: http://localhost:3001
     ports:
       - "3003:3000"
+    depends_on:
+      - postgres
     networks:
       - app-network
+    develop:
+      watch:
+        # Sync source code for hot reload
+        - action: sync
+          path: ./packages/underwriting-ui/src
+          target: /app/packages/underwriting-ui/src
+        # Sync shared package source
+        - action: sync
+          path: ./packages/shared/src
+          target: /app/packages/shared/src
+        # Rebuild when package.json changes
+        - action: rebuild
+          path: ./packages/underwriting-ui/package.json
+        - action: rebuild
+          path: ./package.json
 
 volumes:
   postgres_data:

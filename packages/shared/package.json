@@ -2,10 +2,16 @@
   "name": "@mitigation/shared",
   "version": "1.0.0",
   "description": "Shared types and models for mitigation rules engine",
-  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist",
     "dev": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",

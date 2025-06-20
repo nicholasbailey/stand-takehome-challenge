@@ -8,19 +8,19 @@ rules:
     roof:
         condition:
             operator: "OR"
-            values:
+            operands:
                 - operator: "AND"
-                  values:
+                  operands:
                     - operator: "EQUALS"
-                      values:
+                      operands:
                             - "$roofType"
                             - "ClassB"
                     - operator: "EQUALS"
-                      values:
+                      operands:
                             - "$wildFireRisk"
                             - "A"
                 - operator: "EQUALS"
-                  values: 
+                  operands: 
                     - "$roofType"
                     - "ClassA"
     vegetation:

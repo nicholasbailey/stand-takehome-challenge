@@ -39,7 +39,8 @@ export class DecisionRule {
         return new DecisionRule(
             obj.name,
             hydrateASTNode(obj.condition),
-            obj.variables.map((v: any) => ({
+            // TODO: Remove hack
+            (obj.variables || []).map((v: any) => ({
                 name: v.name,
                 expression: hydrateASTNode(v.expression)
             }))

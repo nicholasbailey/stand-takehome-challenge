@@ -1,15 +1,15 @@
-export interface InspectionModel {
-   observations: ObservationsModel;
-   inputByUserId: string;
+export interface EvaluationRequest {
+   observations: Inspection;
+   asOf?: Date;
 }
 
 // TODO: 
-export interface ObservationsModel {
+export interface Inspection {
    atticVentHasScreens?: boolean;
    roofType?: RoofType;
    widownType?: WindowType;
    wildFireRiskCategory?: WildFireRiskCategory;
-   vegation?: VegetationDescription[];
+   vegetation?: VegetationDescription[];
 }
 
 export enum RoofType {

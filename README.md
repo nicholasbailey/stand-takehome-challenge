@@ -107,7 +107,9 @@ It wouldn't be hard to add one, and if I have a few minutes over the weekend I w
 
 
 ### Underwiting the UI
-Underwriting UI is another simple React app with a single form that allows the user to evaluate inspections against the rules engine. 
+Underwriting UI is another simple React app with a single form that allows the user to evaluate inspections against the rules engine, with an optional date paramenter. 
+
+Both UIs are extremely minimal. This is deliberate. UIs are much more likely to radically change between prototype, initial 'MVP' design, and final delivered design than APIs. Overstructing a prototype UI can lead to you having much more code to refactor down the road. 
 
 
 ## User flow

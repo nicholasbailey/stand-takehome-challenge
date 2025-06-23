@@ -15,6 +15,10 @@ With that in mind, I picked Typescript + Node + Express + React + CSS Modules + 
 
 The solution consists of three applications, a backend which stores rules and executes the evaluation logic, and two UIs one for Applied Sciences users and one for underwriters.
 
+Additionally there's a shared model library that holds pure data model classes. These serve as the interface between the backend and frontends, as well application state within the logic of both the front end and the backend. I'm not sure, as the application evolves, if this will stay the case - application state on the UI side could certainly diverge quite a bit over time. 
+
+Fortunately, making the models the interface of the web API itself means that they are pretty rigid, meaning that if application state does start to diverge in the UI it shouldn't leak back into the model library.
+
 ### Domain Terms
 
 The domain has a few core concepts that will help discussing features.

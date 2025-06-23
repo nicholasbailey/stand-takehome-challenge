@@ -5,13 +5,14 @@ import { RuleSetEntity } from '../entities/rule-set';
 import { MitigationRule } from '../engine/mitigation-rule';
 import { MitigationRuleModel } from '@mitigation/shared/models/mitigation-rule';
 import { RuleExecutionResult, RuleSetExecutionResult } from '@mitigation/shared/models/execution-result';
-import { RuleSetVersion } from '@mitigation/shared/models/rule-set';
+import { RuleSetVersion, RuleSet } from '@mitigation/shared/models/rule-set';
 import { Inspection } from '@mitigation/shared/models/inspection';
 
 // NOTE: This set of utiltiy functions is a lot messier than I would like
 // I was moving fast after a  refactor of how the DB was structured and 
 // didn't have time to really think through the PERFECT api design here
-// there 
+
+
 
 
 export const getRuleSetVersion = async (ruleSetId: number, asOf?: Date): Promise<RuleSetVersion | null> => {
@@ -91,7 +92,7 @@ export const evaluateRuleSet = async (ruleSetVersion: RuleSetVersion, observatio
  * A viewmodel, similar to the RuleSetVersionModel, but right now we're moving 
  * fast and breaking things.
  */
-export const listRuleSets = async (): Promise<RuleSetEntity[]> => {
+export const listRuleSets = async (): Promise<RuleSet[]> => {
     const ruleSetRepository = AppDataSource.getRepository(RuleSetEntity);
     return await ruleSetRepository.find();
 };

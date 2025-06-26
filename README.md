@@ -49,24 +49,25 @@ Another benefit of storing rule-sets as unstructured data is it allows us to fre
 
 
 #### Engine
-The engine is a fairly basic AST processor. A JSON document is parsed into a tree of nodes of a variety of types, each of which can be evaluated against a context. So a tree like
-```
-                 AND
-      EQUALS                           EQUALS
-VALUE: 1, VARIABLE: myNumber     VALUE: 1, VARIABLE: myothernumber
-```
-Would evaluate to true if and only if mynumber = 1 and myothernumber = 2
+The engine uses the `expr-eval` expression language library to evaluate rules against property inspection data. Rules are written as JavaScript-like expressions that can reference properties from the inspection context.
 
-Decision rules can have variables set by expressions. This allows us to execute programs that, in pseudo code, would look like this (not intended to be identical to the rules in the requirements)
-
+For example, a rule might look like:
 ```
-$distanceMultiplier = IF $windowType = "SinglePane" 3 ELSE 2
-$distanceDivisor = IF $vegetationType = "Shrub" 2 ELSE 3
-
-return 30 * $distanceMultiplier / $distanceDivisor
+vegetation.length > 0 && map(v => v.distanceToWindowInFeet < 10, vegetation).some(x => x)
 ```
 
-Ironically, this was by far the easiest part of the project to write. I had that done in less than a quarter of the time that it took me to get the react app reasonably styled and correctly interaction. Let that say what it does. 
+This would evaluate to true if there is vegetation present and any vegetation item is within 10 feet of a window.
+
+The expression language supports:
+- Basic arithmetic and comparison operators
+- Boolean logic (AND, OR, NOT)
+- Array operations like `map`, `filter`, `some`, `every`
+- Property access and function calls
+- Variables and complex nested expressions
+
+This approach provides a much more intuitive authoring experience compared to JSON-based AST trees, while still maintaining the flexibility needed for complex underwriting rules.
+
+Decision rules are stored as simple expression strings and evaluated dynamically against inspection contexts. This allows for powerful rule logic while keeping the data model clean and the user interface manageable.
 
 
 #### Application Layer
@@ -146,76 +147,34 @@ I cared above all about getting a working prototype up, so I did something I alm
 
 ### Usability
 
-The applied sciences UI is very diffucult to work with. The biggest reason for that is that currently folks have to input the raw JSON representation of the entire abstract syntax tree of a rule. That's brutal. 
-
-Fortunately, once you have the AST processing in place, you can freely edit how it is input, as long as you can write something that can be transformed into the AST. Some options would be
-
-A cleaner input format, for example YAML with short hand syntax. For example we might convert the verbose
+The applied sciences UI now uses a JavaScript-like expression language for rule authoring, which is much more intuitive than the previous JSON AST approach. Users can write rules using familiar syntax like:
 
 ```
-{
-  "operator": "VARIABLE",
-  "name": "roofType"
-}
+vegetation.length > 0 && some(map(v => v.distanceToWindowInFeet < 10, vegetation))
 ```
 
-To the more compact
+This is a significant improvement over the previous verbose JSON structure. The expression language provides:
+- Familiar JavaScript-like syntax
+- Built-in support for array operations
+- Clear, readable rule conditions
+- Immediate validation of expression syntax
 
-```
-$roofType
-```
+While there's still room for improvement (such as adding an expression builder UI or autocomplete features), the current implementation provides a solid foundation for rule authoring that's both powerful and user-friendly.
 
-So that our rule might look like:
-
-```
-condition:
-    operator: "OR"
-    operands:
-        - operator: "AND"
-          operands:
-            - operator: "EQUALS"
-              operands:
-                    - "$roofType"
-                    - "ClassB"
-            - operator: "EQUALS"
-              operands:
-                    - "$wildFireRisk"
-                    - "A"
-        - operator: "EQUALS"
-          operands: 
-            - "$roofType"
-            - "ClassA"
-```
-
-Already much more readable.
-
-But of course we could go further. It would be prety simple to write a parser for spreadsheet style input (polish notation), so the rule would look like
-
-```
-OR(AND(EQUALS($roofType, "ClassB"), EQUALS($wildFireRisk, "A")), EQUALS($roofType, "ClassA))
-```
-
-Finally, if we really wanted to get fancy, we could write a basic parser and have our rule look like
-
-```
-($roofType = "ClassB" AND $wildFireRisk = "A") OR $roofType = "ClassA"
-```
-
-Of course, we could also use an out of the box expression language like [Common Expression Language](https://cel.dev/). In a production context, I would almost surely do this, because while writing an expression parser is not that hard, *maintaining* an expression parser is miserable and outside of our core area of competence.
-
-There's also some jank in the mitigation edit process. Right now it's a free form with new line separation. That's a terrible UI, but it serves to illustrate the premise and is something that we aren't 'locked in to' design wise.
+The mitigation editing process still has some jank - it's currently a free form field with newline separation. That's a terrible UI, but it serves to illustrate the premise and is something that we aren't 'locked in to' design wise.
 
 ### Engine Extensions
 
-Currently the Engine is missing a number of node types we'd almost certainly need to support a functional system, these include:
+The current expression language implementation using `expr-eval` provides a solid foundation, but there are several areas where it could be extended:
 
-- EACH: Executing a rule for every item in a list
-- Mathematical operations for numbers
-- Some sort of conditional operation `$var = IF $roofType = A THEN 1 ELSE 2` type stuff
-- Inequality comparisons
-- Negation
+- **Enhanced array operations**: While basic `map` and filtering work, more complex list operations could be added
+- **Date/time operations**: Support for date comparisons and calculations
+- **String manipulation**: Advanced string operations beyond basic equality
+- **Custom functions**: Domain-specific functions for insurance calculations
+- **Type validation**: Better runtime type checking for expression inputs
+- **Performance optimization**: Caching compiled expressions for repeated evaluations
 
-Of course, as we noted, in a real production system we'd be looking for an out of the box expression parser, which would likely support all of this. Coding challenge are weird as they are this strange balance between show us what you know and do it the way you would in real life. I'm never sure exactly how to thread that needle.
+The `expr-eval` library provides a good balance of functionality and simplicity, though for a production system we might consider more robust expression engines like Google's Common Expression Language (CEL) or similar enterprise-grade solutions.
 
 
 ### Applied Sciences UI Extensions
@@ -234,7 +193,9 @@ The underwiting UI has less Jank than applied sciences by a long shot, but there
 
 ## Other things I would do differently in real life
 
-I didn't make a particularly serious attempt to find an out of the box expression processor, because I felt that part of the exercise was illustrating some of the core skill sets and understandings that go into developing a rules engine. There's a good case to be made that the entire rules engine should be based on an out of the box tool. Any attempt to build this in real life would start with at least a day or two of reasearch into the tools that already exist for this kind of functionality.
+After initially building a custom AST-based rules engine, I ultimately moved to using the `expr-eval` expression language library. This proved to be the right choice - it provides a much better user experience for rule authoring while maintaining the flexibility needed for complex underwriting logic.
+
+In a production system, I would likely evaluate additional expression language options like Google's Common Expression Language (CEL) or similar enterprise-grade solutions, depending on performance requirements and feature needs. The key insight is that expression languages provide the right balance of power and usability for this type of rules engine.
 
 
 

@@ -15,7 +15,7 @@ interface RulesTableRowProps {
 // When editing we work with raw strings which get deserialized on save
 // this interface represents that raw string form state.
 interface RulesRowEditState {
-  rule: string;
+  ruleCondition: string;
   mitigations: string;
   name: string;
   plainTextDescription: string;
@@ -31,7 +31,7 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
   editingRuleId,
 }) => {
   const transFormRuleModelToEditState = (rule: MitigationRuleModel): RulesRowEditState => ({
-    rule: JSON.stringify(rule.check, null, 2),
+    ruleCondition: rule.check.condition,
     mitigations: rule.mitigations.map((m) => m.description).join('\n'),
     name: rule.name,
     plainTextDescription: rule.description,
@@ -39,7 +39,10 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
 
   const transformEditStateToRuleModel = (editState: RulesRowEditState): MitigationRuleModel => ({
     name: editState.name,
-    check: JSON.parse(editState.rule),
+    check: {
+      type: 'EXPRESSION',
+      condition: editState.ruleCondition
+    },
     description: editState.plainTextDescription,
     mitigations: editState.mitigations.split('\n').map((m) => ({ description: m, type: MitigationType.Full })),
   });
@@ -82,11 +85,15 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
           />
         </td>
         <td>
-          <textarea
-            value={editState.rule}
-            onChange={(e) => handleInputChange('rule', e.target.value)}
-            className={styles.editTextarea}
-          />
+          <div className={styles.ruleEditContainer}>
+            <label className={styles.fieldLabel}>Expression:</label>
+            <textarea
+              value={editState.ruleCondition}
+              onChange={(e) => handleInputChange('ruleCondition', e.target.value)}
+              className={styles.editTextarea}
+              placeholder="Enter expression (e.g., age > 25 && score < 600)"
+            />
+          </div>
         </td>
         <td>
           <textarea
@@ -111,7 +118,11 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
     <tr key={rule.id}>
       <td>{rule.name}</td>
       <td>{rule.description}</td>
-      <td>{JSON.stringify(rule.check)}</td>
+      <td>
+        <div className={styles.ruleDisplay}>
+          <div><strong>Expression:</strong> {rule.check.condition}</div>
+        </div>
+      </td>
       <td>
         <ul className={styles.mitigationsList}>
           {rule.mitigations.map((m, idx) => (

@@ -13,7 +13,5 @@ export const AppDataSource = new DataSource({
   synchronize: process.env.NODE_ENV === 'development',
   logging: false,
   entities: [RuleSetEntity, RuleSetVersionEntity],
-  migrations: ['src/migrations/*.ts'],
-  migrationsTableName: 'migrations',
   subscribers: [],
 }); 

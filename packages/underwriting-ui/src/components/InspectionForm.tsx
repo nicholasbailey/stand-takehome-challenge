@@ -25,8 +25,16 @@ const wildFireRiskCategoryLabels: Record<WildFireRiskCategory, string> = {
   [WildFireRiskCategory.D]: 'D',
 };
 
+const vegetationTypeLabels: Record<VegetationType, string> = {
+  [VegetationType.Tree]: 'Tree',
+  [VegetationType.Shrub]: 'Shrub',
+  [VegetationType.Grass]: 'Grass',
+};
+
 const InspectionForm: React.FC = () => {
-  const [formData, setFormData] = useState<Inspection>({});
+  const [formData, setFormData] = useState<Inspection>({
+    vegetation: []
+  });
 
   const [results, setResults] = useState<ExecutionResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -45,9 +53,35 @@ const InspectionForm: React.FC = () => {
     } else {
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
       }));
     }
+  };
+
+  const handleVegetationChange = (index: number, field: keyof VegetationDescription, value: string | number) => {
+    setFormData(prev => ({
+      ...prev,
+      vegetation: prev.vegetation?.map((item, i) => 
+        i === index ? { ...item, [field]: value } : item
+      ) || []
+    }));
+  };
+
+  const addVegetation = () => {
+    setFormData(prev => ({
+      ...prev,
+      vegetation: [
+        ...(prev.vegetation || []),
+        { type: VegetationType.Tree, distanceToWindowInFeet: 0 }
+      ]
+    }));
+  };
+
+  const removeVegetation = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      vegetation: prev.vegetation?.filter((_, i) => i !== index) || []
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,7 +134,7 @@ const InspectionForm: React.FC = () => {
               <input
                 id="atticVentCB"
                 type="checkbox"
-                name="observations.atticVentHasScreens"
+                name="atticVentHasScreens"
                 checked={formData.atticVentHasScreens || false}
                 onChange={handleInputChange}
                 className={styles.checkboxInput}
@@ -161,6 +195,55 @@ const InspectionForm: React.FC = () => {
                 <option key={category} value={category}>{wildFireRiskCategoryLabels[category]}</option>
               ))}
             </select>
+          </div>
+
+          <h3 className={styles.sectionTitle}>Vegetation</h3>
+          
+          <div className={styles.vegetationSection}>
+            {formData.vegetation?.map((vegetation, index) => (
+              <div key={index} className={styles.vegetationItem}>
+                <div className={styles.vegetationFields}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Type</label>
+                    <select
+                      value={vegetation.type}
+                      onChange={(e) => handleVegetationChange(index, 'type', e.target.value as VegetationType)}
+                      className={styles.select}
+                    >
+                      {Object.values(VegetationType).map(type => (
+                        <option key={type} value={type}>{vegetationTypeLabels[type]}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Distance to Window (feet)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.1"
+                      value={vegetation.distanceToWindowInFeet}
+                      onChange={(e) => handleVegetationChange(index, 'distanceToWindowInFeet', parseFloat(e.target.value) || 0)}
+                      className={styles.input}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeVegetation(index)}
+                  className={styles.removeButton}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            
+            <button
+              type="button"
+              onClick={addVegetation}
+              className={styles.addButton}
+            >
+              Add Vegetation
+            </button>
           </div>
 
           <button

@@ -8,12 +8,6 @@ import { RuleExecutionResult, RuleSetExecutionResult } from '@mitigation/shared/
 import { RuleSetVersion, RuleSet } from '@mitigation/shared/models/rule-set';
 import { Inspection } from '@mitigation/shared/models/inspection';
 
-// NOTE: This set of utiltiy functions is a lot messier than I would like
-// I was moving fast after a  refactor of how the DB was structured and 
-// didn't have time to really think through the PERFECT api design here
-
-
-
 
 export const getRuleSetVersion = async (ruleSetId: number, asOf?: Date): Promise<RuleSetVersion | null> => {
     const ruleSetVersionRepository = AppDataSource.getRepository(RuleSetVersionEntity);
@@ -76,7 +70,7 @@ export const evaluateRuleSet = async (ruleSetVersion: RuleSetVersion, observatio
     const ruleExecutions: RuleExecutionResult[] = []
     for (const mitigationRule of ruleSetVersion.rules) {
         const executableRule = MitigationRule.fromPlainObject(mitigationRule);
-        const ruleExecutionResult = executableRule.evaluate(observations);
+        const ruleExecutionResult = await executableRule.evaluate(observations);
         ruleExecutions.push(ruleExecutionResult);
     }
     return {

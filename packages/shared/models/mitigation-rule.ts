@@ -1,4 +1,3 @@
-
 export enum MitigationType {
     Full = "Full",
     Bridge = "Bridge",
@@ -10,10 +9,15 @@ export interface Mitigation {
     description: string
 }
 
+export interface ExpressionDecisionRuleModel {
+    type: 'EXPRESSION';
+    condition: string;
+}
+
 export interface MitigationRuleModel {
-    id?: string | undefined;
+    id?: string;
     name: string;
     description: string;
-    check: any
+    check: ExpressionDecisionRuleModel;
     mitigations: Mitigation[]
 }

@@ -23,7 +23,7 @@ export class RuleSetVersionEntity {
     @JoinColumn({ name: 'rule_set_id' })
     ruleSet: RuleSetEntity;
 
-    @Column({ name: 'rule_set_id' })
+    @Column({ name: 'rule_set_id', type: 'integer' })
     ruleSetId: number;
 
     toModel(): RuleSetVersion {

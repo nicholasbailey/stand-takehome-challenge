@@ -7,7 +7,10 @@ export interface RuleSetExecutionResult {
 
 export interface RuleExecutionResult {
     rule: MitigationRuleModel;
-    passed: boolean;
+    results: Array<{
+        contextItem: any;
+        result: boolean;
+    }>;
     mitigations: Mitigation[];
 }
 

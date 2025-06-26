@@ -4,25 +4,6 @@ import { RuleSetVersion } from '@mitigation/shared/models/rule-set';
 import styles from './RulesPage.module.css';
 import RulesTableDisplay from './RulesTableDisplay';
 
-interface RulesTableRowProps {
-    rule: MitigationRuleModel;
-    isPageInEditMode: boolean;
-    onDelete: (ruleId: string) => void;
-    onEdit: (ruleId: string) => void;
-    onSave: (ruleId: string, updatedRule: MitigationRuleModel) => void;
-    onCancel: (ruleId: string) => void;
-    editingRuleId: string | null;
-}
-
-// When editing we work with raw strings which get deserialized on save
-// this interface represents that raw string form state.
-interface RulesRowEditState {
-    rule: string;
-    mitigations: string;
-    name: string;
-    plainTextDescription: string;
-}
-
 // I really don't love the design of this component right now. 
 // It feels like there's poor separation of concerns. Given a bit more
 // time I'd like to refactor the display and edit modes into two separate sub-components
@@ -95,7 +76,10 @@ const RulesPage: React.FC = () => {
             id: crypto.randomUUID(),
             name: "",
             description: "",
-            check: {},
+            check: {
+                type: 'EXPRESSION',
+                condition: ""
+            },
             mitigations: []
         };
 

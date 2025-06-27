@@ -1,6 +1,68 @@
 # STAND exercise, Nick Bailey, June 2025
 
 
+### Stack overview
+
+#### Assessment critiera
+
+When chosing technology for a full stack application, I typically evaluate the software on the following metrics in rough order of priority
+
+1. Does the tool solve the problem reasonably well? Note that this is a 'satisfying' not an 'optimizing' crierion. Given two tools that both solve the problem reasonably well criteria 2-4 tend to dominate.
+2. What tools are we already using? Each new tool or technology adds substantial mainteance overhead, so we should strongly prioritize tools we already use.
+3. How widely used is the technology? Widely used tools supported by large open source foundations or major corporations are stabler than tools maintained by individual developers. Developers are alos more likely to be familiar with industry standard tools.
+4. How good is the tool's history of stability. How long has it been maintained. Does it have a history of major defects?
+5. How well does the tool solve the problem?
+
+
+#### What tools do we need
+
+Looking at the requirements for our application we need:
+
+1. A mechanism for taking human readable decision rules writen by applied sciences and executing the *deterministically* against input data. There are a number of ways we could do this, but the best option is likely a restricted expression parsing tool that can turn simple code-like expressions into an executable Abstract Syntax Tree. I'll talk more about why this is the right tool moving forward.
+2. A mechanism for storing and retrieving rules for evalauation.
+3. An API that exposes both CRUD operation for rules and evalaution of rules
+4. A framework for building user-facing applications to manage and evaluate rules.
+
+#### Decision rules
+
+The core of this appliation is an engine that processes rules written by our applied sciences team. We would like them to be able to write these rules in a syntax that is both intuitive and flexible. 
+
+That team is technical enough to work with simple programs. This means we should have no trouble training them on a DSL for writing expresion rules. There are a couple of different styles of DSL we could adopt
+
+1. JSON/YAML based DSLs, which essentially have you wr"iting out part of all of the syntax tree. A rule in this might look like `{"and": [{"<": [1, 2]}, {"=", [1, 1]}]}`
+2. Expression style DLS, that simulate the syntax of most programming languages, with rules looking like `1 < 2 AND 1 = 1`
+3. Spreadsheet/functional DSLs, that simulate the syntax of a spreadsheet expression, with rules looking like `AND(LT(1,2), EQUALS(1, 1))`
+
+Of these three expression style DSLs are generally the most user friendly, followed by spreadsheet sytle DSLs and finally markup based DSLs.
+
+In my original implementation, I overindexed on demonstrating an understanding of how such a system works under the hood, and so chose to focus on handrolling a markup-based DSL. This was a misalignment on the goal of our exercise here. So this new iteration focuses on an expression based DSL for decision rules. We should *not* maintain such a tool ourselves. While building one is simpler than you might think, the maintenance cost is really high.
+
+Some options here include:
+
+1. Google's [Common Expression Langauge](). CEL is a robust expression lnaguage This has the huge pro of being free and open source, and backed by Google. It has the huge downside of only having official Go and Java bindings. There is a reasonably robust Python implementation by a company named 'Cloud Custodian' [link](https://github.com/cloud-custodian). The community Javascript bindings are not production ready. 
+2. Language specific options. These vary widely by language. Javascript has Math.js and expr-eval, both of which have been around and are wildely use, but each of which is maintained by a single developer. 
+
+This gives us the following options:
+
+1. Build a backend in Golang or Java in order to be able to leverage CEL. 
+2. Build a backend in Python, and leverage the Cloud Custodian CEL implementation.
+3. Use a langauge specific expression-parser
+
+In a production context, the fundamental question would be: 'what languages does our ecosystem support already?' The cost of introducing a new language is very, very high. The long term congnitive and operational overhead of code-switching is very high. Yes, we want to chose the right tool for the problem. But interopability is a huge part of what makes a tool right. 
+
+With that in mind, my evaluation logic would run roughly as follows
+
+1. If we already support or plan to support Go or Java services, we would absolutely use Google backed CEL in one of those languages.
+2. If we support Python, we should use Cloud Custodian backed CEL. Their implementation is pretty robust, as it seems to be core to their business as a SaaS rules engine.
+3. If we do not support any of those languages (say, only Node/typescript), things get a bit more complicated. I think I would still prioritize 'do not introduce a new language' over 'be able to use CEL', and would pick another, well established tool. In the JS ecosystem math.js is the most robust.
+
+For my solution, I chose to continue act 'as if' we were in scenario 3. This was driven by practical considerations. Timelines are tight, and I want us to focus on the user experience rather than on spinning up and getting a stable Python service.
+
+If not, I do not personally believe the benefits of using an official Google implementation of CEL would come close to outweighing the constant cognitive cost of adding a new language to our stack. Yes, using a well maintained, portable expression language is really valuable. But so is ensuring high developer productivity by minimizing the number of stacks we need to maintain. Long term, that overhead is almost certainly worse. We should use the right tool for the job, but interoperability is a huge part of what makes a tool right.
+
+So the decision of what tool to use would come down to supported languages in our ecosystem. I'm going to operate under the made up rule that our already-supported languages are Python and Typescript. This let's me both leverage languages I'm fastest in, while also illustrate the way we'd make a tradeoff decision like this. 
+
+
 ## Stack overview
 
 The problem presented here doesn't apply a lot of pressures for picking any particular language, framework or tooling.

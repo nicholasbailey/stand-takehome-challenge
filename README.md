@@ -1,9 +1,9 @@
 # STAND exercise, Nick Bailey, June 2025
 
 
-### Stack overview
+## Stack overview
 
-#### Assessment critiera
+### Assessment critiera
 
 When chosing technology for a full stack application, I typically evaluate the software on the following metrics in rough order of priority
 
@@ -14,7 +14,7 @@ When chosing technology for a full stack application, I typically evaluate the s
 5. How well does the tool solve the problem?
 
 
-#### What tools do we need
+### What tools do we need
 
 Looking at the requirements for our application we need:
 
@@ -23,7 +23,7 @@ Looking at the requirements for our application we need:
 3. An API that exposes both CRUD operation for rules and evalaution of rules
 4. A framework for building user-facing applications to manage and evaluate rules.
 
-#### Decision rules
+### Decision rules
 
 The core of this appliation is an engine that processes rules written by our applied sciences team. We would like them to be able to write these rules in a syntax that is both intuitive and flexible. 
 
@@ -48,30 +48,30 @@ This gives us the following options:
 2. Build a backend in Python, and leverage the Cloud Custodian CEL implementation.
 3. Use a langauge specific expression-parser
 
-In a production context, the fundamental question would be: 'what languages does our ecosystem support already?' The cost of introducing a new language is very, very high. The long term congnitive and operational overhead of code-switching is very high. Yes, we want to chose the right tool for the problem. But interopability is a huge part of what makes a tool right. 
+In a production context, the fundamental question would be: 'what languages does our ecosystem support already?' The cost of introducing a new language is very, very high. The long term congnitive and operational overhead of code-switching brutal. Yes, we want to chose the right tool for the problem. But interopability is a huge part of what makes a tool right. 
 
 With that in mind, my evaluation logic would run roughly as follows
 
 1. If we already support or plan to support Go or Java services, we would absolutely use Google backed CEL in one of those languages.
 2. If we support Python, we should use Cloud Custodian backed CEL. Their implementation is pretty robust, as it seems to be core to their business as a SaaS rules engine.
-3. If we do not support any of those languages (say, only Node/typescript), things get a bit more complicated. I think I would still prioritize 'do not introduce a new language' over 'be able to use CEL', and would pick another, well established tool. In the JS ecosystem math.js is the most robust.
+3. If we do not support any of those languages (say, only Node/typescript), things get a bit more complicated. I think I would still prioritize 'do not introduce a new language' over 'be able to use CEL', and would pick another, well established tool.
 
-For my solution, I chose to continue act 'as if' we were in scenario 3. This was driven by practical considerations. Timelines are tight, and I want us to focus on the user experience rather than on spinning up and getting a stable Python service.
+In the JS ecosystem math.js is the most robust option for this kind of work. While it is not maintained by a large organization, it does have widespread production use, with over a million weekly npm downloads, and is actively maintained. 
 
-If not, I do not personally believe the benefits of using an official Google implementation of CEL would come close to outweighing the constant cognitive cost of adding a new language to our stack. Yes, using a well maintained, portable expression language is really valuable. But so is ensuring high developer productivity by minimizing the number of stacks we need to maintain. Long term, that overhead is almost certainly worse. We should use the right tool for the job, but interoperability is a huge part of what makes a tool right.
-
-So the decision of what tool to use would come down to supported languages in our ecosystem. I'm going to operate under the made up rule that our already-supported languages are Python and Typescript. This let's me both leverage languages I'm fastest in, while also illustrate the way we'd make a tradeoff decision like this. 
+For my solution, I chose to continue act 'as if' we were in scenario 3. This was driven by practical considerations. Timelines are tight for this second take on the problem, and I want to focus on solving the problems rather than getting a new stack in place.
 
 
-## Stack overview
+### Other tooling
 
-The problem presented here doesn't apply a lot of pressures for picking any particular language, framework or tooling.
+Outside of the decision rule tooling, no part of our problem requires us to use anything but the most industry standard basic tools.
 
-The application is likely to have *relatively* few concurrent users. Total load is going to be low. Computational complexity is also pretty low. This means we are free to pick a web application stack without serious concern for speed. In a vacuum a more efficient web stack usually means lower hosting costs, but at our scale, hosting costs will be dwarfed by development costs, so we should optimize for development speed.
+Datascale is fairly small. A single decision rule takes up perhaps 100-200 characters max for less than half a kilobyte of data. With 10,000 decision rules that's 50 MB or so. This is small enough to be stored in a *single* Postgres JSONB document, let alone 
 
-Working in a company, I would just use whatever web UI and backend frameworks were the default for that organization. Consistency dwarfs other considerations in this case where there are no complex feature or performance constraints.
+Maintaining version history adds scale, but not that much. Even if we tracked every single edit, we have applied sciences folks editing rules a few times a day. Back of the envelope we probably have less than 10000 edits a year. So even if we copied the entire ruleset on every single modification and kept full history of every edit, we would still be talking about a dataset in the tens-to-hundreds of thousands of rows and a full data set in the 500 GB range. This is well within the capacity of a standard postgres setup. And that's if we are incredibly lazy in how we store data.
 
-With that in mind, I picked Typescript + Node + Express + React + CSS Modules + Postgres + Docker Compose, because that's a set of tools I personally can work quickly in without having to code-switch between two different languages, and it's a stack LLMs execute on pretty well, which is valuable when iterating rapidly.
+With that in mind, there is no reason to pick a database other than Postgres. It's the most widely used relational database, has excellent suport for document or structured data and handles everything we want to do here.
+
+As for API and UI frameworks, there is nothing special about our needs for either. Our total traffic is likely to be extremely low. I cannot imagine we are dealing with more than perhaps a few hundered concurrent users accross applied sciences and underwriting. The actual logic of our application is not going to be especially compute intensive. And our UI doesn't do anything all that special - it's basic forms and tabular data display. I chose React and Express.js for this prototype, because those are industry standard tools that can be iterated with extremely rapidly, but this decision would be guided heavily by what tooling we already had in place.
 
 ## Architecture Overview
 

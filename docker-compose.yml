@@ -41,8 +41,8 @@ services:
           path: ./packages/mitigation-rules-engine/src
           target: /app/packages/mitigation-rules-engine/src
         - action: sync
-          path: ./packages/shared/src
-          target: /app/packages/shared/src
+          path: ./packages/shared-models/src
+          target: /app/packages/shared-models/src
         - action: rebuild
           path: ./packages/mitigation-rules-engine/package.json
         - action: rebuild
@@ -70,8 +70,11 @@ services:
           target: /app/packages/applied-sciences-ui/src
         # Sync shared package source
         - action: sync
-          path: ./packages/shared/src
-          target: /app/packages/shared/src
+          path: ./packages/shared-models/src
+          target: /app/packages/shared-models/src
+        - action: sync
+          path: ./packages/shared-components/src
+          target: /app/packages/shared-components/src
         # Rebuild when package.json changes
         - action: rebuild
           path: ./packages/applied-sciences-ui/package.json
@@ -100,8 +103,11 @@ services:
           target: /app/packages/underwriting-ui/src
         # Sync shared package source
         - action: sync
-          path: ./packages/shared/src
-          target: /app/packages/shared/src
+          path: ./packages/shared-models/src
+          target: /app/packages/shared-models/src
+        - action: sync
+          path: ./packages/shared-components/src
+          target: /app/packages/shared-components/src
         # Rebuild when package.json changes
         - action: rebuild
           path: ./packages/underwriting-ui/package.json

@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { MitigationRuleModel } from '@mitigation/shared/models/mitigation-rule';
-import { RuleSetVersion } from '@mitigation/shared/models/rule-set';
-import styles from './RulesPage.module.css';
-import RulesTableDisplay from './RulesTableDisplay';
+import { CheckType, MitigationRuleModel } from '@mitigation/shared-models/models/mitigation-rule';
+import { RuleSetVersion } from '@mitigation/shared-models/models/rule-set';
+import styles from './RulesForm.module.css';
+import EditableRulesTableRow from './EditableRulesTableRow';
 
 // I really don't love the design of this component right now. 
 // It feels like there's poor separation of concerns. Given a bit more
@@ -13,7 +13,7 @@ import RulesTableDisplay from './RulesTableDisplay';
 // and the enclosing page feels quite blurry. This would be my first target for a refactor
 // post spike.
 
-const RulesPage: React.FC = () => {
+const RulesForm: React.FC = () => {
     const [ruleSet, setRuleSet] = useState<RuleSetVersion | null>(null);
     const [draftRuleSet, setDraftRuleSet] = useState<RuleSetVersion | null>(null);
     const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
@@ -27,7 +27,6 @@ const RulesPage: React.FC = () => {
     }, []);
 
     const [isInEditMode, setIsInEditMode] = useState(false);
-
 
     // These API calls should probably be moved to a module wrapping them 
     const startDraft = async () => {
@@ -77,8 +76,8 @@ const RulesPage: React.FC = () => {
             name: "",
             description: "",
             check: {
-                type: 'EXPRESSION',
-                condition: ""
+                type: CheckType.MATHJS_EXPRESSION,
+                expression: ""
             },
             mitigations: []
         };
@@ -152,7 +151,7 @@ const RulesPage: React.FC = () => {
 
     return (
     <div className={styles.container}>
-        <h2 className={styles.title}>{isInEditMode ? `Draft Rules - Version: ${draftRuleSet?.ruleSetName}` : "Current Rules"}</h2>
+        <h2 className={styles.title}>{isInEditMode ? `Draft Rules: ${draftRuleSet?.ruleSetName}` : "Current Rules"}</h2>
         <table className={styles.rulesTable}>
         <thead>
             <tr>
@@ -165,7 +164,7 @@ const RulesPage: React.FC = () => {
         </thead>
         <tbody>
             {rulesToDisplay.map((rule) => (
-                <RulesTableDisplay 
+                <EditableRulesTableRow 
                     key={rule.id} 
                     rule={rule} 
                     isPageInEditMode={isInEditMode}
@@ -213,7 +212,7 @@ const RulesPage: React.FC = () => {
                     className={styles.actionButton}
                     onClick={startDraft}
                 >
-                    Edit Rules
+                    Create New Draft Ruleset
                 </button>
             </div>
         )}
@@ -221,4 +220,4 @@ const RulesPage: React.FC = () => {
     );
 }
 
-export default RulesPage;
+export default RulesForm;

@@ -3,10 +3,10 @@ import { AppDataSource } from '../data-source';
 import { RuleSetVersionEntity } from '../entities/rule-set-version';
 import { RuleSetEntity } from '../entities/rule-set';
 import { MitigationRule } from '../engine/mitigation-rule';
-import { MitigationRuleModel } from '@mitigation/shared/models/mitigation-rule';
-import { RuleExecutionResult, RuleSetExecutionResult } from '@mitigation/shared/models/execution-result';
-import { RuleSetVersion, RuleSet } from '@mitigation/shared/models/rule-set';
-import { Inspection } from '@mitigation/shared/models/inspection';
+import { MitigationRuleModel } from '@mitigation/shared-models/models/mitigation-rule';
+import { RuleExecutionResult, RuleSetExecutionResult } from '@mitigation/shared-models/models/execution-result';
+import { RuleSetVersion, RuleSet } from '@mitigation/shared-models/models/rule-set';
+import { Inspection } from '@mitigation/shared-models/models/inspection';
 
 
 export const getRuleSetVersion = async (ruleSetId: number, asOf?: Date): Promise<RuleSetVersion | null> => {

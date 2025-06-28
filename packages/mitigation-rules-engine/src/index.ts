@@ -4,8 +4,12 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { AppDataSource } from './data-source';
 import rulesetRoutes from './routes/ruleset-routes';
+import { globalErrorHandler, notFoundHandler, setupProcessErrorHandlers } from './middleware/error-handler';
 
 dotenv.config();
+
+// Setup process-level error handlers
+setupProcessErrorHandlers();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -26,6 +30,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// 404 handler for unmatched routes (must be after all routes)
+app.use(notFoundHandler);
+
+// Global error handler (must be last middleware)
+app.use(globalErrorHandler);
+
 // Initialize database and start server
 AppDataSource.initialize()
   .then(() => {
@@ -35,4 +45,5 @@ AppDataSource.initialize()
   })
   .catch((error) => {
     console.error('Error during Data Source initialization', error);
+    process.exit(1);
   }); 

@@ -1,0 +1,197 @@
+/* === Form Body Styles === */
+
+.formBody {
+  padding: 2rem 1.5rem 2.5rem;
+}
+
+/* Constrain form elements to 480px and center them */
+.formBody form {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 1.5rem;
+}
+
+.field:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.select,
+.input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  font-size: 1rem;
+  color: #111;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.select:focus,
+.input:focus {
+  outline: none;
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.checkboxLabel {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkboxInput {
+  width: 20px;
+  height: 20px;
+  accent-color: #000;
+}
+
+.button {
+  width: 100%;
+  height: 48px;
+  background: #000;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  margin-top: 2rem;
+}
+
+.button:hover:not(:disabled) {
+  background: #333;
+}
+
+.button:disabled {
+  background: #777;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  background: #ffe6e6;
+  border: 1px solid #ffcccc;
+  color: #b30000;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.vegetationSection {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: #f9fafb;
+  margin-bottom: 1rem;
+}
+
+.vegetationItem {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.vegetationItem:last-child {
+  margin-bottom: 0;
+}
+
+.vegetationFields {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
+
+.vegetationFields .field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.addButton {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #059669;
+}
+
+.removeButton {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.removeButton:hover {
+  background-color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .vegetationItem {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .vegetationFields {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .removeButton {
+    align-self: flex-start;
+  }
+} 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MitigationRuleModel, MitigationType } from '@mitigation/shared/models/mitigation-rule';
-import styles from './RulesPage.module.css';
+import { CheckType, MitigationRuleModel, MitigationType } from '@mitigation/shared-models/models/mitigation-rule';
+import styles from './EditableRulesTableRow.module.css';
 
 interface RulesTableRowProps {
   rule: MitigationRuleModel;
@@ -15,13 +15,13 @@ interface RulesTableRowProps {
 // When editing we work with raw strings which get deserialized on save
 // this interface represents that raw string form state.
 interface RulesRowEditState {
-  ruleCondition: string;
+  expression: string;
   mitigations: string;
   name: string;
   plainTextDescription: string;
 }
 
-const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
+const EditableRulesTableRow: React.FC<RulesTableRowProps> = ({
   rule,
   isPageInEditMode,
   onDelete,
@@ -31,7 +31,7 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
   editingRuleId,
 }) => {
   const transFormRuleModelToEditState = (rule: MitigationRuleModel): RulesRowEditState => ({
-    ruleCondition: rule.check.condition,
+    expression: rule.check.expression,
     mitigations: rule.mitigations.map((m) => m.description).join('\n'),
     name: rule.name,
     plainTextDescription: rule.description,
@@ -40,8 +40,8 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
   const transformEditStateToRuleModel = (editState: RulesRowEditState): MitigationRuleModel => ({
     name: editState.name,
     check: {
-      type: 'EXPRESSION',
-      condition: editState.ruleCondition
+      type: CheckType.MATHJS_EXPRESSION,
+      expression: editState.expression
     },
     description: editState.plainTextDescription,
     mitigations: editState.mitigations.split('\n').map((m) => ({ description: m, type: MitigationType.Full })),
@@ -88,8 +88,8 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
           <div className={styles.ruleEditContainer}>
             <label className={styles.fieldLabel}>Expression:</label>
             <textarea
-              value={editState.ruleCondition}
-              onChange={(e) => handleInputChange('ruleCondition', e.target.value)}
+              value={editState.expression}
+              onChange={(e) => handleInputChange('expression', e.target.value)}
               className={styles.editTextarea}
               placeholder="Enter expression (e.g., age > 25 && score < 600)"
             />
@@ -120,7 +120,7 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
       <td>{rule.description}</td>
       <td>
         <div className={styles.ruleDisplay}>
-          <div><strong>Expression:</strong> {rule.check.condition}</div>
+          <div>{rule.check.expression}</div>
         </div>
       </td>
       <td>
@@ -154,4 +154,4 @@ const RulesTableDisplay: React.FC<RulesTableRowProps> = ({
   );
 };
 
-export default RulesTableDisplay; 
+export default EditableRulesTableRow; 

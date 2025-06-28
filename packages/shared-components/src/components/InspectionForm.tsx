@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { EvaluationRequest, Inspection, RoofType, WindowType, WildFireRiskCategory, VegetationType, VegetationDescription } from '@mitigation/shared/models/inspection';
-import { ExecutionResult } from '@mitigation/shared/models/execution-result';
+import { EvaluationRequest, Inspection, RoofType, WindowType, WildFireRiskCategory, VegetationType, VegetationDescription } from '@mitigation/shared-models/models/inspection';
+import { ExecutionResult } from '@mitigation/shared-models/models/execution-result';
 import ExecutionResults from './ExecutionResults';
 import styles from './InspectionForm.module.css';
 
@@ -31,7 +31,11 @@ const vegetationTypeLabels: Record<VegetationType, string> = {
   [VegetationType.Grass]: 'Grass',
 };
 
-const InspectionForm: React.FC = () => {
+interface InspectionFormProps {
+  ruleSetId: number | 'main';
+}
+
+const InspectionForm: React.FC<InspectionFormProps> = ({ruleSetId}) => {
   const [formData, setFormData] = useState<Inspection>({
     vegetation: []
   });
@@ -98,7 +102,7 @@ const InspectionForm: React.FC = () => {
         inspectionData.asOf = new Date(asOf);
       }
 
-      const response = await axios.post('http://localhost:3001/api/rulesets/main/evaluate', inspectionData);
+      const response = await axios.post(`http://localhost:3001/api/rulesets/${ruleSetId}/evaluate`, inspectionData);
       setResults(response.data);
     } catch (err) {
       setError('Failed to execute ruleset');
@@ -109,10 +113,7 @@ const InspectionForm: React.FC = () => {
   };
 
   return (
-    <div className={styles.card}>
-      <div className={styles.hero}>
-        <h1 className={styles.title}>Stand Insurance Mitigation Tool</h1>
-      </div>
+
       <div className={styles.formBody}>
         <form onSubmit={handleSubmit}>
           {/* Evaluation options */}
@@ -263,7 +264,6 @@ const InspectionForm: React.FC = () => {
 
         {results && <ExecutionResults results={results} />}
       </div>
-    </div>
   );
 };
 

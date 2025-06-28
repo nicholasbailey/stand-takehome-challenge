@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { RuleSetVersion } from '@mitigation/shared/models/rule-set';
+import { RuleSetVersion } from '@mitigation/shared-models/models/rule-set';
 import { RuleSetEntity } from './rule-set';
 
 // The 'Entity' naming convention here is a bit unconventional,

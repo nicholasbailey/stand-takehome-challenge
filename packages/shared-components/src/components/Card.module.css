@@ -1,0 +1,29 @@
+.card {
+  max-width: 600px;
+  margin: 3rem auto;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden; /* keep hero rounded */
+  background: #ffffff;
+}
+
+/* Responsive design for different screen sizes */
+@media (min-width: 768px) {
+  .card {
+    max-width: 700px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 767px) {
+  .card {
+    max-width: 95%;
+    margin: 1.5rem auto;
+  }
+} 

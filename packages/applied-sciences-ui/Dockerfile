@@ -5,14 +5,18 @@ WORKDIR /app
 # Copy root package files for workspace setup
 COPY package*.json ./
 
-# Copy shared package
-COPY packages/shared ./packages/shared
+# Copy shared packages
+COPY packages/shared-models ./packages/shared-models
+COPY packages/shared-components ./packages/shared-components
 
 # Copy this service's package.json
 COPY packages/applied-sciences-ui/package*.json ./packages/applied-sciences-ui/
 
 # Install dependencies for the workspace
 RUN npm ci
+
+# Build shared-components package
+RUN cd packages/shared-components && npm run build
 
 # Copy the source code
 COPY packages/applied-sciences-ui ./packages/applied-sciences-ui

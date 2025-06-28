@@ -1,0 +1,12 @@
+.hero {
+  background: #000;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+}
+
+.title {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+} 

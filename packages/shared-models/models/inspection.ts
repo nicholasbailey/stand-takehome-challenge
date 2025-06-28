@@ -3,7 +3,6 @@ export interface EvaluationRequest {
    asOf?: Date;
 }
 
-// TODO: 
 export interface Inspection {
    atticVentHasScreens?: boolean;
    roofType?: RoofType;

@@ -1,5 +1,5 @@
 {
-  "name": "@mitigation/shared",
+  "name": "@mitigation/shared-models",
   "version": "1.0.0",
   "description": "Shared types and models for mitigation rules engine",
   "types": "dist/index.d.ts",
@@ -23,4 +23,4 @@
     "ts-jest": "^29.1.1",
     "typescript": "^5.3.3"
   }
-} 
+}

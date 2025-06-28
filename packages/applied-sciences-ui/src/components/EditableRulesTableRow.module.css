@@ -1,0 +1,108 @@
+
+
+.ruleDisplay {
+  font-size: 0.9rem;
+}
+
+.ruleDisplay div {
+  margin-bottom: 0.25rem;
+}
+
+.ruleDisplay div:last-child {
+  margin-bottom: 0;
+}
+
+.ruleDisplay strong {
+  color: #374151;
+  font-weight: 600;
+}
+
+.editInput {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.editTextarea {
+  width: 100%;
+  min-height: 240px;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: monospace;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+
+.smallActionButton {
+  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  margin: 0 0.25rem;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.smallActionButton:hover {
+  background: #333;
+}
+
+.smallActionButton.delete {
+  background: #dc2626; /* red-600 */
+}
+
+.smallActionButton.delete:hover {
+  background: #b91c1c; /* red-700 */
+}
+
+
+.actionsCell {
+  text-align: center;
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+
+.mitigationEdit {
+  margin-bottom: 0.5rem;
+}
+
+.mitigationEdit:last-child {
+  margin-bottom: 0;
+}
+
+.ruleEditContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldLabel {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.ruleEditContainer .editInput {
+  margin-bottom: 0.5rem;
+}
+
+.ruleEditContainer .editTextarea {
+  min-height: 80px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+
+.mitigationsList {
+  margin: 0;
+  padding-left: 1.25rem; /* bullet indent */
+}

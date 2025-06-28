@@ -18,9 +18,20 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@mitigation/shared-components": ["../shared-components/src"],
+      "@mitigation/shared-components/*": ["../shared-components/src/*"],
+      "@mitigation/shared-models": ["../shared-models"],
+      "@mitigation/shared-models/*": ["../shared-models/*"]
+    }
   },
   "include": [
     "src"
+  ],
+  "references": [
+    { "path": "../shared-components" },
+    { "path": "../shared-models" }
   ]
 } 

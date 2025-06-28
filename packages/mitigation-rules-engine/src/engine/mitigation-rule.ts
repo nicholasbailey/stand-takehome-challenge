@@ -1,39 +1,31 @@
-import { ExpressionDecisionRule } from "./expression-decision-rule";
-import { Mitigation, MitigationRuleModel } from "@mitigation/shared/models/mitigation-rule";
-import { RuleExecutionResult } from "@mitigation/shared/models/execution-result";
+import { Mitigation, MitigationRuleModel } from "@mitigation/shared-models/models/mitigation-rule";
+import {RuleExecutionResult } from "@mitigation/shared-models/models/execution-result";
+import { Check, decisionRuleFromPlainObject } from "./check";
 
 export class MitigationRule {
     constructor(
         public name: string,
         public plainTextDescription: string,
-        public check: ExpressionDecisionRule,
+        public check: Check,
         public mitigations: Mitigation[]
     ) {}
 
     async evaluate(context: Record<string, any>): Promise<RuleExecutionResult> {
         const results = await this.check.evaluate(context);
-        const shouldApplyMitigations = this.shouldApplyMitigations(results);
-        
+        const anyFailed = results.some(item => !item.value);
         return {
             rule: this.toPlainObject(),
             results: results,
-            mitigations: shouldApplyMitigations ? this.mitigations : []
+            mitigations: anyFailed ? this.mitigations : []
         }
     }
 
-    private shouldApplyMitigations(results: Array<{ contextItem: any; result: boolean }>): boolean {
-        // Apply mitigations if any result is false
-        return results.some(item => !item.result);
-    }
 
     toPlainObject(): MitigationRuleModel {
         return {
             name: this.name,
             description: this.plainTextDescription,
-            check: {
-                type: 'EXPRESSION',
-                condition: this.check.rule.condition
-            },
+            check: this.check.toPlainObject(),
             mitigations: this.mitigations
         }
     }
@@ -42,7 +34,7 @@ export class MitigationRule {
         return new MitigationRule(
             obj.name,
             obj.description,
-            new ExpressionDecisionRule(obj.check),
+            decisionRuleFromPlainObject(obj.check),
             obj.mitigations,
         )
     }

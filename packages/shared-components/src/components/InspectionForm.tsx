@@ -37,6 +37,10 @@ interface InspectionFormProps {
 
 const InspectionForm: React.FC<InspectionFormProps> = ({ruleSetId}) => {
   const [formData, setFormData] = useState<Inspection>({
+    atticVentHasScreens: false,
+    roofType: RoofType.ClassA,
+    widownType: WindowType.SinglePane,
+    wildFireRiskCategory: WildFireRiskCategory.A,
     vegetation: []
   });
 
@@ -120,6 +124,7 @@ const InspectionForm: React.FC<InspectionFormProps> = ({ruleSetId}) => {
           <div className={styles.field}>
             <label htmlFor="asOfDateTime" className={styles.label}>Evaluate As-Of (optional)</label>
             <input
+              name="asOfDateTime"
               id="asOfDateTime"
               type="datetime-local"
               value={asOf}

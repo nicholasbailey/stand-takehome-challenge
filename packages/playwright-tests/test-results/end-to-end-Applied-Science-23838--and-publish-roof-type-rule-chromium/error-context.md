@@ -1,0 +1,54 @@
+# Page snapshot
+
+```yaml
+- heading "Stand Insurance Mitigation Tool" [level=1]
+- text: Evaluate As-Of (optional)
+- textbox "Evaluate As-Of (optional)"
+- heading "Inspection Information" [level=3]
+- checkbox "Attic Vent Has Screens"
+- text: Attic Vent Has Screens Roof Type
+- combobox "Roof Type":
+  - option "Select Roof Type"
+  - option "Class A"
+  - option "Class B"
+  - option "Class C" [selected]
+- text: Window Type
+- combobox "Window Type":
+  - option "Select Window Type"
+  - option "Single Pane" [selected]
+  - option "Double Pane"
+  - option "Tempered Glass"
+- text: Wildfire Risk Category
+- combobox "Wildfire Risk Category":
+  - option "Select Risk Category"
+  - option "A" [selected]
+  - option "B"
+  - option "C"
+  - option "D"
+- heading "Vegetation" [level=3]
+- button "Add Vegetation"
+- button "Execute"
+- heading "Execution Results" [level=2]
+- table:
+  - rowgroup:
+    - row "Rule Name Description Results Mitigations":
+      - cell "Rule Name"
+      - cell "Description"
+      - cell "Results"
+      - cell "Mitigations"
+  - rowgroup:
+    - row "Roof Ensure roof is Class A by assembly, free of gaps, and well maintained. In low wildfire areas(Category A) roofs can be Class B or Class A ✗":
+      - cell "Roof"
+      - cell "Ensure roof is Class A by assembly, free of gaps, and well maintained. In low wildfire areas(Category A) roofs can be Class B or Class A"
+      - cell "✗"
+      - cell:
+        - list:
+          - listitem
+    - row "Ensure all vents, chimneys, and screens can withstand embers (i.e., should be ember-rated) ✗ Add Vents":
+      - cell
+      - cell "Ensure all vents, chimneys, and screens can withstand embers (i.e., should be ember-rated)"
+      - cell "✗"
+      - cell "Add Vents":
+        - list:
+          - listitem: Add Vents
+```

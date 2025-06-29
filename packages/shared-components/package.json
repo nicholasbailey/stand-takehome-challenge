@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc && npm run copy-css",
-    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc -b && npm run copy-css",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "copy-css": "mkdir -p dist/components && cp src/components/*.css dist/components/",
     "test": "jest",
     "dev": "tsc --watch"

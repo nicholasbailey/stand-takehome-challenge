@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { RuleSetVersion } from '@mitigation/shared-models/models/rule-set';
 import { RuleSetEntity } from './rule-set';
 
@@ -16,6 +16,7 @@ export class RuleSetVersionEntity {
 
     // This probably could be DB generated if we wanted. Right now just 
     // doing it in app code
+    @Index()
     @Column({ name: 'effective_date', type: 'timestamp' })
     effectiveDate: Date;
 
@@ -23,6 +24,7 @@ export class RuleSetVersionEntity {
     @JoinColumn({ name: 'rule_set_id' })
     ruleSet: RuleSetEntity;
 
+    @Index()
     @Column({ name: 'rule_set_id', type: 'integer' })
     ruleSetId: number;
 

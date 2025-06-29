@@ -72,6 +72,7 @@ const EditableRulesTableRow: React.FC<RulesTableRowProps> = ({
         <td>
           <input
             type="text"
+            name="name"
             value={editState.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
             className={styles.editInput}
@@ -79,6 +80,7 @@ const EditableRulesTableRow: React.FC<RulesTableRowProps> = ({
         </td>
         <td>
           <textarea
+            name="plainTextDescription"
             value={editState.plainTextDescription}
             onChange={(e) => handleInputChange('plainTextDescription', e.target.value)}
             className={styles.editTextarea}
@@ -86,8 +88,8 @@ const EditableRulesTableRow: React.FC<RulesTableRowProps> = ({
         </td>
         <td>
           <div className={styles.ruleEditContainer}>
-            <label className={styles.fieldLabel}>Expression:</label>
             <textarea
+              name="expression"
               value={editState.expression}
               onChange={(e) => handleInputChange('expression', e.target.value)}
               className={styles.editTextarea}
@@ -97,6 +99,7 @@ const EditableRulesTableRow: React.FC<RulesTableRowProps> = ({
         </td>
         <td>
           <textarea
+            name="mitigations"
             value={editState.mitigations}
             onChange={(e) => handleInputChange('mitigations', e.target.value)}
             className={styles.editTextarea}

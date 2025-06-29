@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "npm run build:shared && npm run build:apps",
-    "build:shared": "npm run build --workspace=packages/shared-models & npm run build --workspace=packages/shared-components",
+    "build:shared": "npm run build --workspace=packages/shared-models && npm run build --workspace=packages/shared-components",
     "build:apps": "npm run build --workspace=packages/underwriting-ui & npm run build --workspace=packages/mitigation-rules-engine & npm run build --workspace=packages/applied-sciences-ui & wait",
     "rebuild": "npm run clean && npm run build",
     "watch": "npm run dev --workspace=packages/shared-models & npm run start --workspace=packages/underwriting-ui & npm run dev --workspace=packages/mitigation-rules-engine & wait",

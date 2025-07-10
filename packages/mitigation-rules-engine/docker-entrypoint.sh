@@ -9,8 +9,7 @@ done
 
 # Run migrations (using typeorm-ts-node-commonjs to handle TypeScript)
 echo "Running TypeORM migrations..."
-npm run typeorm schema:sync -- -d src/data-source.ts
-npm run typeorm migration:run -- -d src/data-source.ts
+npm run migration:run
 
 # Execute passed command
 exec "$@" 
